@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>game2</title>
+    <meta charset='utf-8'>
+    <style>
+        canvas{
+            background-color: #eee;
+        }
+    </style>
+    </head>
+    <body>
+        <canvas height='450' width='600' id='myCanvas'></canvas>
+        <p id='message' style='color: black;'>スペースキーでスタート!</p>
+        <script>
+            const canvas = document.getElementById('myCanvas');
+            const ctx = canvas.getContext('2d');
+
+            const message = document.getElementById('message');
+
+            let interval;
+
+            let playerY = canvas.height / 2;
+            let playerX = 50;
+            let playerSize = 30;
+
+            let upPressed = false;
+            let downPressed = false;
+
+            let Enemys = [];
+
+            let condition = 0;
+
+            let score = 0;
+            let viewScore = 0;
+
+
+            const bgm = new Audio('OPEDジングル30 loop.wav');
+            /*bgm.loop = true;
+            bgm.play();*/
+
+
+            function createEnemy(){
+                this.y = Math.floor(Math.random() * canvas.height);
+                this.x = canvas.width;
+            }
+
+            function pushEnemy(){
+                let enemy = new createEnemy(); 
+                Enemys.push(enemy);
+            }
+
+
+
+
+            // draw function
+
+
+
+
+            function drawPlayer(){
+                ctx.beginPath();
+                ctx.rect(playerX,playerY - 25,playerSize,playerSize);
+                ctx.fillStyle = '#75f075';
+                ctx.fill();
+                ctx.closePath();
+            }
+            function drawEnemy(){
+                let i = 0;
+                Enemys.forEach(function(){
+                    if(Enemys[i].x <= 0 - playerSize){
+                        Enemys.splice(i,1);
+                    }
+                    ctx.beginPath();
+                    ctx.rect(Enemys[i].x,Enemys[i].y,playerSize,playerSize);
+                    ctx.fillStyle = '#eb4034';
+                    ctx.fill();
+                    ctx.closePath();
+                    Enemys[i].x -= 5;
+                    i++;
+                })
+            }
+
+            function drawScore(){
+                ctx.fillStyle = '#0095dd';
+                ctx.fillText(`score: ${viewScore}`,0,0);
+            }
+
+
+
+
+
+            function CollisionDetection(){
+                let i = 0;
+                Enemys.forEach(function(){
+                    if(playerX + playerSize > Enemys[i].x && Enemys[i].x < playerX){
+                        if((playerY + (playerSize / 2) > Enemys[i].y) && (playerY - (playerSize / 2) < Enemys[i].y + playerSize)){
+                            //console.log('!!!');
+                            gameOver();
+                        }
+                    }
+                })
+            }
+            
+            function draw(){
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+
+                drawPlayer();
+                drawEnemy();
+                drawScore();
+                CollisionDetection();
+
+                if(Math.floor(Math.random() * 100) >= 95){
+                    pushEnemy();
+                }
+                score += 0.1;
+                viewScore = Math.floor(score);
+                //console.log(Enemys);
+                if(upPressed && ((playerY + playerSize / 2) >= 5)){
+                    playerY -= 5;
+                }else if(downPressed && ((playerY + playerSize / 2) <= canvas.height)){
+                    playerY += 5;
+                }
+            }
+
+            function gameOver(){
+                clearInterval(interval);
+                bgm.pause();
+                bgm.currentTime = 0;
+                message.textContent = `ゲームオーバー　スペースキーでもう一度`;
+                message.style.color = 'red';
+                condition = 0;
+            }
+
+            function keyDownHandler(e){
+                //console.log(e.key + ' keydown');
+                switch(e.key){
+                    case 'ArrowUp' || 'Up':
+                        upPressed = true;
+                        break;
+                    case 'ArrowDown' || 'Down':
+                        downPressed = true;
+                        break;
+                    case ' ':
+                        if(condition === 0){
+                            startGame();
+                            message.textContent = '';
+                            condition = 1;
+                        }
+                        break;
+                }
+            }
+
+            function keyUpHandler(e){
+                switch(e.key){
+                    case 'ArrowUp' || 'Up':
+                        upPressed = false;
+                        break;
+                    case 'ArrowDown' || 'Down':
+                        downPressed = false;
+                        break;
+                }
+            }
+            function startGame(){
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                Enemys = [];
+                score = 0;
+                playerY = canvas.height / 2;
+                playerX = 50;
+                interval = setInterval(draw,20);
+                bgm.loop = true;
+                bgm.play();
+            }
+            document.addEventListener('keydown',keyDownHandler,false);
+            document.addEventListener('keyup',keyUpHandler,false);
+        </script>
+    </body>
+</html>
