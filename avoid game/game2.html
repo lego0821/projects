@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="this is game of &lt;canvas>.">
+    <meta name='theme-color' content='default'>
+    <title>game2</title>
+    <meta charset='utf-8'>
+    <style>
+        canvas{
+            background-color: #eee;
+        }
+        #setting{
+            position: fixed;
+            right: 10px;
+            top: 10px;
+            height: 30px;
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+        }
+        #settingDeteil{
+            width: 250px;
+            min-height: 200px;
+            box-shadow: 0px 0px 10px #aaa;
+            border: 2px solid gray;
+            border-radius: 10px;
+            display: none;
+            transition: all 0.3s ease;
+            position: fixed;
+            right: 10px;
+            top: 60px;
+            -webkit-transition: all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+        }
+        .settingBtn{
+            color: white;
+            background-color: cornflowerblue;
+            border: none;
+            cursor: pointer;
+            margin-left: 3em;
+            -webkit-transition: all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+        }
+        .settingBtn:hover{
+            filter: brightness(1.5);
+        }
+    </style>
+    </head>
+    <body>
+        <canvas height='450' width='600' id='myCanvas'></canvas>
+        <p id='message' style='color: black;'>スペースキーでスタート!</p>
+        <input type='image' src='setting.svg' id='setting' alt='setting' title='setting'>
+        <div id='settingDeteil'>
+            <label><input type='checkbox' id='save'>データの保存(cookieを使用)</label>
+            <input type='button' value='cookieの削除' class='settingBtn' onclick='Cookies.remove("MyBest")'>
+            <br>
+            <br>
+            <input type='range' id='volume' value='100' title='volume'>
+            <p>音量:<span id='volumeDisplay'></span></p>
+        </div>
+        <script src='js.cookie-2.0.2.min.js'></script>
+        <script>
+            const canvas = document.getElementById('myCanvas');
+            const ctx = canvas.getContext('2d');
+
+            const message = document.getElementById('message');
+
+            let interval;
+
+            let playerY = canvas.height / 2;
+            let playerX = 10;
+            let playerSize = 30;
+
+            let upPressed = false;
+            let downPressed = false;
+
+            let Enemys = [];
+
+            let condition = 0;
+
+            let score = 0;
+            let viewScore = 0;
+
+            let setting = [0,0];
+
+
+            const bgm = new Audio('OPEDジングル30 loop.wav');
+            /*bgm.loop = true;
+            bgm.play();*/
+
+
+            if(Cookies.get('MyBest') !== undefined){
+                document.getElementById('save').checked = true;
+                setting[1] = 1;
+            }
+
+            function createEnemy(){
+                this.y = Math.floor(Math.random() * canvas.height);
+                this.x = canvas.width;
+            }
+
+            function pushEnemy(){
+                let enemy = new createEnemy(); 
+                Enemys.push(enemy);
+            }
+
+
+
+
+            // draw function
+
+
+
+
+            function drawPlayer(){
+                ctx.beginPath();
+                ctx.rect(playerX,playerY - 25,playerSize,playerSize);
+                ctx.fillStyle = '#75f075';
+                ctx.fill();
+                ctx.closePath();
+            }
+            function drawEnemy(){
+                let i = 0;
+                Enemys.forEach(function(){
+                    if(Enemys[i].x <= 0 - playerSize){
+                        Enemys.splice(i,1);
+                    }
+                    ctx.beginPath();
+                    ctx.rect(Enemys[i].x,Enemys[i].y,playerSize,playerSize);
+                    ctx.fillStyle = '#eb4034';
+                    ctx.fill();
+                    ctx.closePath();
+                    Enemys[i].x -= 5;
+                    i++;
+                })
+            }
+
+            function drawScore(){
+                ctx.fillStyle = '#0095dd';
+                ctx.font = '25px sansserif';
+                ctx.fillText(`score: ${viewScore}`,10,30);
+
+                if(Cookies.get('MyBest') !== undefined){
+                    ctx.fillStyle = '#ddcb00';
+                    ctx.font = '25px sansserif';
+                    ctx.fillText(`my best: ${Cookies.get('MyBest')}`,canvas.width - 175,30);
+                }
+            }
+
+
+
+
+
+            function CollisionDetection(){
+                let i = 0;
+                Enemys.forEach(function(){
+                    if(playerX + playerSize > Enemys[i].x && Enemys[i].x < playerX){
+                        if((playerY + (playerSize / 2) > Enemys[i].y) && (playerY - (playerSize / 2) < Enemys[i].y + playerSize)){
+                            //console.log('!!!');
+                            gameOver();
+                        }
+                    }
+                })
+            }
+            
+            function draw(){
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+
+                drawPlayer();
+                drawEnemy();
+                drawScore();
+                CollisionDetection();
+
+                if(Math.floor(Math.random() * 100) >= 95){
+                    pushEnemy();
+                }
+                score += 0.1;
+                viewScore = Math.floor(score);
+                //console.log(Enemys);
+                if(upPressed && ((playerY + playerSize / 2) >= 5)){
+                    playerY -= 5;
+                }
+                if(downPressed && ((playerY + playerSize / 2) <= canvas.height)){
+                    playerY += 5;
+                }
+            }
+
+            function gameOver(){
+                clearInterval(interval);
+                bgm.pause();
+                bgm.currentTime = 0;
+                message.textContent = `ゲームオーバー　スペースキーでもう一度`;
+                message.style.color = 'red';
+                if(setting[1] === 1){
+                    const mybest = Cookies.get('MyBest');
+                    if(score > mybest || Cookies.get('MyBest') === undefined){
+                        Cookies.set('MyBest',viewScore,{expires: 365});
+                    }
+                }
+                condition = 0;
+            }
+
+            function keyDownHandler(e){
+                //console.log(e.key + ' keydown');
+                switch(e.key){
+                    case 'ArrowUp' || 'Up':
+                        upPressed = true;
+                        break;
+                    case 'ArrowDown' || 'Down':
+                        downPressed = true;
+                        break;
+                    case ' ':
+                        if(condition === 0){
+                            startGame();
+                            message.textContent = '';
+                            condition = 1;
+                        }
+                        break;
+                }
+            }
+
+            function keyUpHandler(e){
+                switch(e.key){
+                    case 'ArrowUp' || 'Up':
+                        upPressed = false;
+                        break;
+                    case 'ArrowDown' || 'Down':
+                        downPressed = false;
+                        break;
+                }
+            }
+            function startGame(){
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                Enemys = [];
+                score = 0;
+                playerY = canvas.height / 2;
+                playerX = 10;
+                interval = setInterval(draw,20);
+                bgm.loop = true;
+                bgm.play();
+            }
+
+
+            function settingDisplay(){
+                switch(setting[0]){
+                    case 0:
+                        document.getElementById('settingDeteil').style.display = 'block';
+                        setting[0] = 1;
+                        break;
+                    case 1:
+                        document.getElementById('settingDeteil').style.display = 'none';
+                        setting[0] = 0;
+                        break;
+                }
+                {
+                    const elm = document.getElementById('settingDeteil');
+                    if(setting[0] === 1){
+                        elm.style.opacity = '1';
+                        elm.style.zIndex = '1'
+                    }else{
+                        elm.style.opacity = '0';
+                        elm.style.zIndex = '-1';
+                    }
+                }
+            }
+            function IsSave(){
+                switch(setting[1]){
+                    case 0:
+                        setting[1] = 1;
+                        break;
+                    case 1:
+                        setting[1] = 0;
+                        break;
+                }
+            }
+
+
+            document.addEventListener('keydown',keyDownHandler,false);
+            document.addEventListener('keyup',keyUpHandler,false);
+
+            document.getElementById('setting').addEventListener('click',settingDisplay,false);
+            document.getElementById('save').addEventListener('change',IsSave,false);
+
+            document.getElementById('setting').addEventListener('click',function(){
+                if(setting[0] === 0){
+                    this.style.transform = 'rotate3d(0, 0, 1, 360deg)';
+                }else{
+                    this.style.transform = 'rotate3d(0, 0, 1, -360deg)';
+                }
+            },false);
+
+            window.addEventListener('scroll',function(){
+                const elm = document.getElementById('top');
+                const scroll = window.pageYOffset;
+                if(scroll > 150){
+                    elm.style.opacity = '1';
+                    elm.style.zIndex = '1'
+                }else{
+                    elm.style.opacity = '0';
+                    elm.style.zIndex = '-1';
+                }
+            });
+
+            document.getElementById('volume').addEventListener('mousemove',function(){
+                if(this.value >= 49 && this.value <= 51){
+                    this.value = 50;
+                }
+                document.getElementById('volumeDisplay').textContent = this.value;
+                bgm.volume = this.value / 100;
+            },false)
+
+        </script>
+    </body>
+</html>
