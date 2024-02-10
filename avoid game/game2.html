@@ -60,7 +60,12 @@
             <input type='button' value='cookieの削除' class='settingBtn' onclick='Cookies.remove("MyBest")'>
             <br>
             <br>
-            <input type='range' id='volume' value='100' title='volume'>
+            <input type='range' id='volume' value='100' title='volume' list='scale'>
+            <datalist id='scale'>
+                <option value='0'>0</option>
+                <option value='50'>50</option>
+                <option value='100'>100</option>
+            </datalist>
             <p>音量:<span id='volumeDisplay'>100</span></p>
         </div>
         <script src='https://github.com/js-cookie/js-cookie/releases/download/v2.0.2/js.cookie-2.0.2.min.js'></script>
@@ -295,9 +300,6 @@
             },false);
 
             document.getElementById('volume').addEventListener('mousemove',function(){
-                if(this.value >= 49 && this.value <= 51){
-                    this.value = 50;
-                }
                 document.getElementById('volumeDisplay').textContent = this.value;
                 bgm.volume = this.value / 100;
             },false)
