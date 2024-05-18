@@ -7,17 +7,10 @@
       a[href^='https://lego0821.github.io/projects/']::before{
         content: '';
         border-top: 2px solid green;
+        border-right: 2px solid green;
         width: 5px;
         translate-y: 0.5em;
-      }
-      a[href^='https://lego0821.github.io/projects/']::after{
-        left: 4px;
-      	width: 4px;
-      	height: 4px;
-      	border-top:2px solid green;
-      	border-right: 2px solid green;
-      	-webkit-transform: rotate(45deg);
-      	transform: rotate(45deg);
+        transform: rotate3d(0,0,45deg);
       }
     </style>
   </head>
