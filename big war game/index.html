@@ -963,7 +963,7 @@
 				data.forEach((item,i) => {
 					if(item.cooldown !== 0){
 						data[i].cooldown--;
-						document.querySelectorAll('#create button')[i].disabled = false;
+						document.querySelectorAll('#create button')[i].disabled = true;
 					} else if(item.cooldown === 0){
 						document.querySelectorAll('#create button')[i].disabled = false;
 					}
