@@ -130,7 +130,9 @@
                     speed: 5,
                     attack: 10,
                     color: '#fffcc2',
-                    object: 'none'
+                    object: 'none',
+					cooltime: 10,
+					cooldown: 0
                 },
                 {
                     name: 'fast',
@@ -139,7 +141,9 @@
                     speed: 7.5,
                     attack: 3,
                     color: '#97e6b0',
-                    object: 'none'
+                    object: 'none',
+					cooltime: 20,
+					cooldown: 0
                 },
                 {
                     name: 'sword',
@@ -148,7 +152,9 @@
                     speed: 5,
                     attack: 20,
                     color: '#ffc973',
-                    object: 'sword'
+                    object: 'sword',
+					cooltime: 40,
+					cooldown: 0
                 },
                 {
                     name: 'shield',
@@ -157,7 +163,9 @@
                     speed: 1,
                     attack: 5,
                     color: '#73c9ff',
-                    object: 'shield'
+                    object: 'shield',
+					cooltime: 50,
+					cooldown: 0
                 },
                 {
                     name: 'arrow',
@@ -166,7 +174,9 @@
                     speed: 0.25,
                     attack: 10,
                     color: '#d49481',
-                    object: 'arrow'
+                    object: 'arrow',
+					cooltime: 75,
+					cooldown: 0
                 },
                 {
                     name: 'fire',
@@ -175,14 +185,18 @@
                     speed: 1.25,
                     attack: 30,
                     color: '#fc827e',
-                    object: 'fire'
+                    object: 'fire',
+					cooltime: 100,
+					cooldown: 0
                 },
                 {
                     name: 'bomb',
                     price: 50,
                     speed: 7.5,
                     color: '#333',
-                    object: 'none'
+                    object: 'none',
+					cooltime: 200,
+					cooldown: 0
                 },
                 {
                     name: 'witch',
@@ -191,7 +205,9 @@
                     speed: 3.75,
                     attack: 15,
                     color: '#f5b1fc',
-                    object: 'wand'
+                    object: 'wand',
+					cooltime: 0,
+					cooldown: 0
                 },
 
             ];
@@ -942,6 +958,18 @@
 
             }
 
+
+			function updateCooltime(){
+				data.forEach((item,i) => {
+					if(item.cooldown !== 0){
+						data[i].cooldown--;
+						document.querySelectorAll('#create button')[i].disable = false;
+					} else if(item.cooldown === 0){
+						document.querySelectorAll('#create button')[i].disable = false;
+					}
+				});
+			}
+
             
             function draw() {
                 life1 = Math.max(life1,0);
@@ -957,6 +985,7 @@
 
                 drawPlayer();
                 drawEnemy();
+				updateCooltime();
 
 
                 
@@ -1024,11 +1053,48 @@
 
 
 
+			function getItem(parm){
+                    let result;
+                    for(const item of data){
+                        if(parm === item.name){
+                            result = item;
+                            break;
+                        }
+                    }
+                    return result;
+                };
 
 
              // event handler
             document.getElementById('create').addEventListener('click',(e) => {
-                createPlayer(e.target.textContent);
+                
+                let object = getItem(e.target.textContent);
+				if (object.cooldown === 0){
+					createPlayer(e.target.textContent);
+					switch(object.name){
+						case 'normal':
+							data[0].cooldown = data[0].cooltime;
+							break;
+						case 'fast':
+							data[1].cooldown = data[1].cooltime;
+							break;
+						case 'sword':
+							data[2].cooldown = data[2].cooltime;
+							break;
+						case 'shield':
+							data[3].cooldown = data[3].cooltime;
+							break;
+						case 'arrow':
+							data[4].cooldown = data[4].cooltime;
+							break;
+						case 'bomb':
+							data[5].cooldown = data[5].cooltime;
+							break;
+						case 'fire':
+							data[6].cooldown = data[6].cooltime;
+							break;
+					}
+				}
             },false);
 
             window.addEventListener('load',(e) => {
@@ -1059,16 +1125,6 @@
 
             document.querySelectorAll('#create button').forEach(e => {
                 // alert(e);
-                function getItem(parm){
-                    let result;
-                    for(const item of data){
-                        if(parm === item.name){
-                            result = item;
-                            break;
-                        }
-                    }
-                    return result;
-                };
                 let object = getItem(e.textContent);
                 // alert(object);
                 if (object.name === 'bomb') {
