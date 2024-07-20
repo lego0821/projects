@@ -963,9 +963,9 @@
 				data.forEach((item,i) => {
 					if(item.cooldown !== 0){
 						data[i].cooldown--;
-						document.querySelectorAll('#create button')[i].disable = false;
+						document.querySelectorAll('#create button')[i].disabled = false;
 					} else if(item.cooldown === 0){
-						document.querySelectorAll('#create button')[i].disable = false;
+						document.querySelectorAll('#create button')[i].disabled = false;
 					}
 				});
 			}
