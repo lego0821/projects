@@ -48,13 +48,12 @@
                 display: none;
             }
 
-
-		#nameTable{
+		
+		#nameTable td{
+			width: 75px;
+			text-align: center;
 			border: 1px solid gray;
 			border-collapse: collapse;
-		}
-		#nameTable td{
-			width:100px;
 		}
         </style>
     </head>
@@ -70,7 +69,7 @@
             <button disabled>fire</button>
             <!-- <button>witch</button> -->
         </div>
-	<table id='nameTable'>
+	<table id='nameTable' border='1'>
 		<tr>
 			<td>歩兵</td>
 			<td>歩兵(速)</td>
@@ -79,6 +78,15 @@
 			<td>弓兵</td>
 			<td>爆弾</td>
 			<td>炎</td>
+		</tr>
+		<tr>
+			<td>5</td>
+			<td>10</td>
+			<td>15</td>
+			<td>20</td>
+			<td>30</td>
+			<td>50</td>
+			<td>75</td>
 		</tr>
 	</table>
         <div id="canvasImage">
