@@ -1159,8 +1159,12 @@
                 const DateObj = new Date();
                 if (DateObj.getHours() <= 6 || DateObj.getHours() >= 18) {
                     document.getElementById('theme').checked = true;
+			isDark = true;
+			document.body.className = 'dark';
                 } else {
                     document.getElementById('theme').checked = false;
+			isDark = false;
+			document.body.className = '';
                 }
 				if(document.getElementById('theme').checked){
 					//isDark = true;
