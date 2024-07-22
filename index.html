@@ -6,12 +6,15 @@
     <style>
       a[href^='https://lego0821.github.io/projects/']::before{
         content: '';
-        border-top: 2px solid green;
-        border-right: 2px solid green;
+        border-top: 4px solid green;
+        border-right: 4px solid green;
         width: 5px;
         height: 5px;
         display: inline-block;
         transform: rotateZ(45deg);
+      }
+      #toTopPage::before{
+        content: '↩';
       }
     </style>
   </head>
@@ -23,6 +26,6 @@
     <br>
     <a href='https://lego0821.github.io/projects/big war game/'>大戦争ゲーム</a>
     <br>
-    <a href='https://lego0821.github.io/lego0821/'>lego0821 トップページ</a>
+    <a href='https://lego0821.github.io/lego0821/' id='toTopPage'>lego0821 トップページ</a>
   </body>
 </html>
