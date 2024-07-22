@@ -998,7 +998,6 @@
 						data[i].cooldown--;
 						document.querySelectorAll('#create button')[i].disabled = true;
 					} else if(item.cooldown === 0){
-						console.log([i,document.querySelectorAll('#create button')[0].disabled]);
 						document.querySelectorAll('#create button')[Number(i)].disabled = false;
 					}
 				});
