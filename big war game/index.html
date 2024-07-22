@@ -1003,12 +1003,16 @@
 				});
 			}
 		function EnemyRate(){
-			if(life1 >= 200){
-				return 100;
-			}else if(life1 >= 500){
-				return 75;
-			} else {
+			if(life1 >= 600){
 				return 50;
+			}else if(life1 >= 300){
+				return 75;
+			}else if(life1 >= 200){
+				return 100;
+			}else if(life1 >= 100){
+				return 150;
+			}else if(life1 <= 100){
+				return 200;
 			}
 		}
             
