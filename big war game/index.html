@@ -1002,7 +1002,15 @@
 					}
 				});
 			}
-
+		function EnemyRate(){
+			if(life1 >= 200){
+				return 100;
+			}else if(life1 >= 500){
+				return 75;
+			} else {
+				return 50;
+			}
+		}
             
             function draw() {
                 life1 = Math.max(life1,0);
@@ -1065,15 +1073,7 @@
 
 
 		// createEnemy
-		function EnemyRate(){
-			if(life1 >= 200){
-				return 100;
-			}else if(life1 >= 500){
-				return 75;
-			} else {
-				return 50;
-			}
-		}
+		
 		    
                 if(random(1000) <= EnemyRate()){
                         const rn = random(100);
