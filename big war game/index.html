@@ -391,7 +391,7 @@
                 move(){
                     if(this.ally) {
                         this.x -= 20;
-                    } else {
+                    } else if(!this.ally){
                         this.x += 20;
                     }
                     switch (this.direction) {
