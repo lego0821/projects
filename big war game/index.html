@@ -68,6 +68,7 @@
             <button disabled>arrow</button>
             <button disabled>bomb</button>
             <button disabled>fire</button>
+            <button disabled>fly</button>
             <!-- <button>witch</button> -->
         </div><!-- a\\\ --><br>
 	<table id='nameTable' border='1'>
@@ -228,6 +229,15 @@
                     color: '#333',
                     object: 'none',
 					cooltime: 1000,
+					cooldown: 0
+                },
+                {
+                    name: 'fly',
+                    price: 30,
+                    speed: 7.5,
+                    color: '#00c3ff',
+                    object: 'wing',
+					cooltime: 75,
 					cooldown: 0
                 },/*
                 {
@@ -602,6 +612,22 @@
 
             function fire(x,y) {
                 ctx.drawImage(imageData[0].content, x, y, 19, 20);
+            }
+
+            function wing(x,y,ally = true){
+                if(ally){
+                    ctx.beginPath();
+                    ctx.fillStyle = '#f7f7f7';
+                    ctx.rect(x + 20,y + 5,15,15);
+                    ctx.fill();
+                    ctx.closePath();
+                }else{
+                    ctx.beginPath();
+                    ctx.fillStyle = '#f7f7f7';
+                    ctx.rect(x + 5,y + 5,15,15);
+                    ctx.fill();
+                    ctx.closePath();
+                }
             }
 
             function collisionDetection(x1,x2){
