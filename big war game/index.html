@@ -293,7 +293,7 @@
             class Player {
                 constructor(type){
                     this.x = 650;
-                    this.y = 375;
+                    this.y = type === 'fly' ? 325 : 375;
                     this.width = 25;
                     this.height = 25;
                     this.animation = null;
@@ -739,6 +739,9 @@
                                 if(random(1000) >= 990){
                                     createFire(random(item.x - 30,25),item.y);
                                 }
+                            break;
+                        case 'wing':
+                            wing(item.x,item.y,true);
                             break;
                         case 'none':
                             break;
