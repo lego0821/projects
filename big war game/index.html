@@ -234,6 +234,7 @@
                 {
                     name: 'fly',
                     price: 30,
+                    life: 150,
                     speed: 7.5,
                     color: '#00c3ff',
                     object: 'wing',
@@ -641,7 +642,7 @@
                                 if(x1.name === 'bomb'){
                                     return x1.x + 50 >= x2.x && x1.x - 50 <= x2.x + x2.width;
                                 } else {
-                                    return x1.x <= x2.x + x2.width && x1.x >= x2.x; 
+                                    return (x1.x <= x2.x + x2.width && x1.x >= x2.x) && x1.y >= x2.y - x2.height && x1.y - x1.height <= x2.y; 
                                 }
                                 break;
                             default:
